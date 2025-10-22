@@ -1,0 +1,21 @@
+/* Layout & hero */
+.hero { padding: 3rem 1rem; }
+.hero-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; }
+@media (max-width: 900px) { .hero-wrap { grid-template-columns: 1fr; } }
+
+/* Buttons */
+.btn { display:inline-block; padding:.6rem 1rem; border-radius:.5rem; text-decoration:none; background:#3b82f6; color:#fff; font-weight:600; }
+.btn-secondary { background:#10b981; color:#fff; }
+.btn-outline { background:transparent; color:#3b82f6; border:2px solid #3b82f6; }
+
+/* Hero text & image */
+.hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin: 0 0 .5rem; }
+.hero .lead { font-size: 1.1rem; opacity: .9; margin-bottom: 1.25rem; }
+.hero-cta { display:flex; gap:.75rem; flex-wrap:wrap; }
+.hero-img img { width:100%; height:auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.12); }
+
+/* Page width for plots/code */
+.page-content .content { max-width: 1100px; }
+
+/* Footer */
+.site-footer { margin-top: 3rem; padding: 2rem 0; border-top: 1px solid rgba(0,0,0,.06); text-align:center; opacity:.8; }

@@ -1,0 +1,135 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "EEGDUCKS",
+    "section": "",
+    "text": "A Project by Shannon Fernandes. Read the EEGDUCKS paper here"
+  },
+  {
+    "objectID": "index.html#why",
+    "href": "index.html#why",
+    "title": "EEGDUCKS",
+    "section": "What is EEGDUCKS?",
+    "text": "What is EEGDUCKS?\nEEGDUCKS is a gentle on-ramp to EEG analysis. It wraps common MNE workflows behind a small, consistent API so newcomers can:\n\nload EEG recordings,\napply essentials (filtering, epochs, ICA),\nvisualize signals, PSDs, and band power, with minimal boilerplate.\n\nWhen you outgrow it, you already speak MNE’s language.\n\nPython packages like MNE and MATLAB extensions like EEGLAB are known throughout academia for their utility in preprocessing, analyzing, and plotting EEG data. However, the steep learning curve makes it challenging for psychology students, especially in countries like India, where such training isn’t a part of the standard curriculum. The lack of familiarity with python or MATLAB syntax paired with the daunting task of navigating EEG cleaning, analyzing, and plotting may discourage students from a rather a exciting field. Thus, to deal effectively with such an issue, the library eegducks was created, which serves as an MNE wrapper allowing students to enter neuroimaging with little to no experience in coding to import EEG data, carry out preprocessing, plot EEG signals and the power spectrum, and also run Independent Component Analysis (ICA). The library is meant to serve as a preliminary attempt to make EEG analysis and other neuroimaging tools more accessible.\nYou can read the EEGDUCKS paper here"
+  },
+  {
+    "objectID": "index.html#highlights",
+    "href": "index.html#highlights",
+    "title": "EEGDUCKS",
+    "section": "Highlights",
+    "text": "Highlights\n\nConsistent, beginner-friendly API\nBatteries-included plotting (PSD, bands, ICA components)\nPlays nicely with MNE, drop down to raw MNE anytime\n\n\n\n\nMade with ❤️ using Quarto. © Shannon Fernandes"
+  },
+  {
+    "objectID": "index.html#whats-on-this-site",
+    "href": "index.html#whats-on-this-site",
+    "title": "EEGDUCKS",
+    "section": "What’s on this site",
+    "text": "What’s on this site\n\nGetting Started: install + 5-minute quickstart\n\nTutorials: step-by-step guides with runnable code\n\nFAQ: short answers to common questions\n\n\n\nMade with ❤️ using Quarto. © EEGDUCKS contributors"
+  },
+  {
+    "objectID": "gettingstarted.html",
+    "href": "gettingstarted.html",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "EEGDUCKS is a beginner-friendly Python library designed to simplify EEG (electroencephalography) data analysis for psychology students. It serves as a wrapper around MNE-Python, making neuroimaging analysis accessible without extensive coding experience.\n\n\n\nBefore using eegducks, you need to install the library. In a Python environment or Jupyter notebook, run:\npip install eegducks\nNote: If using Google Colab, prefix the command with an exclamation mark:\n!pip install eegducks\n\n\n\nOnce installed, import eegducks into your Python environment. It’s conventional to use an alias for convenience:\nimport eegducks as eds\nThis allows you to call eegducks functions using the shorter eds prefix throughout your code.\n\n\n\n\n\nEEG datasets typically consist of two components:\n\nEEG data file: Contains the actual brain signal recordings (formats: .fiff, .set, etc.)\nChannel location file: Specifies the positions of EEG electrodes (formats: .tsv, .locs)\n\n\n\n\nFirst, specify the path to your channel location file:\n# Define the channel location file path\nchan = \"/path/to/your/channel_locations.locs\"\nNext, load your EEG data using the load() function:\n# Load EEG data and store it in a variable called 'raw'\nraw = eds.load(\"/path/to/your/eeg_data.set\", locinf=chan)\n\n\n\nThe load() function accepts several optional parameters for preprocessing:\nload(filepath, l_freq=1, h_freq=30, preload=True, \n     ref=\"average\", plot=True, locinf=None)\n\nfilepath: Path to your EEG data file (required)\nl_freq: Low-pass filter frequency in Hz (default: 1)\nh_freq: High-pass filter frequency in Hz (default: 30)\npreload: Whether to load data into memory (default: True)\nref: Reference method for channels (default: “average”)\nplot: Whether to display plots automatically (default: True)\nlocinf: Path to channel location file (default: None)\n\nWhat happens during loading: The function imports your data, applies filtering to remove noise, sets up channel locations, and prepares the data for analysis.\n\n\n\n\nAfter loading your data, you can visualize the raw EEG signals over time:\n# Plot continuous EEG data\neds.plot(raw)\n\n\nCustomize your visualization with these parameters:\nplot(raw, dur=5, n_chan=20)\n\nraw: Your loaded EEG data object (required)\ndur: Duration of data to display in seconds (default: 5)\nn_chan: Number of channels to display (default: 20)\n\nThis generates a time-series plot showing voltage fluctuations across different electrode channels.\n\n\n\n\n\nThe power spectrum reveals the frequency composition of your EEG signals, showing activity in different brain wave bands (delta, theta, alpha, beta, gamma).\n# Plot power spectrum for all channels\neds.psdplt(raw)\n\n# Plot average power spectrum across channels\neds.psdplt(raw, avg=True)\n\nThe power spectrum plot helps identify dominant frequencies in your data and can reveal artifacts or abnormal patterns.\n\n\n\nEpochs are time-locked segments of EEG data aligned to specific events (e.g., stimulus presentation, button presses).\n\n\nIf your events are already embedded in the EEG file:\neds.epochs(raw)\n\n\n\n\n\nIf events are stored separately (common in structured datasets):\n# Specify the events file path\nev = \"/path/to/your/events.tsv\"\n\n# Create epochs using the events file\neds.epochs(raw, events_tsv=ev)\n\n\n\nFine-tune your epoch extraction:\nepochs(raw, event_id=2, tmin=-1, tmax=2, baseline=(-0.5, 0), \n       reject=None, plot=True, events_tsv=None)\n\nraw: Your loaded EEG data object (required)\nevent_id: Specific event type to extract (default: 2)\ntmin: Start time relative to event in seconds (default: -1)\ntmax: End time relative to event in seconds (default: 2)\nbaseline: Time window for baseline correction (default: -0.5 to 0 seconds)\nreject: Threshold for rejecting bad epochs (default: None)\nplot: Whether to generate epoch plots (default: True)\nevents_tsv: Path to external events file (default: None)\n\nThis function automatically generates visualizations showing averaged epochs and individual trials.\n\n\n\n\nICA separates EEG signals into independent components, making it easier to identify and remove artifacts like eye blinks, muscle activity, or electrical noise.\n# Run ICA with default 15 components\neds.ica(raw)\n ### ICA Function Parameters\nAdjust the ICA parameters as needed:\nica(raw, n_components=15, montage=None)\n\nraw: Your loaded EEG data object (required)\nn_components: Number of independent components to compute (default: 15)\nmontage: Electrode montage specification (default: None)\n\nThe ICA function generates plots showing the spatial distribution and time course of each component, helping you identify which components represent artifacts versus neural activity.\n\n\n\nExamine activity in specific frequency bands associated with different brain states:\n# Plot standard frequency bands (delta, theta, alpha, beta, gamma)\neds.pltbands(raw)\n\n# For epoched data, you can also specify custom bands\n# eds.pltbands(epochs, bands=None)\n\nStandard frequency bands: - Delta (1-4 Hz): Deep sleep - Theta (4-8 Hz): Drowsiness, meditation - Alpha (8-13 Hz): Relaxed wakefulness - Beta (13-30 Hz): Active thinking, focus - Gamma (30+ Hz): Higher cognitive processing\n\n\n\nHere’s a complete example combining all steps:\n# Import library\nimport eegducks as eds\n\n# Load data\nchan = \"/content/sample/eeglab_chan32.locs\"\nraw = eds.load(\"/content/sample/eeglab_data.set\", locinf=chan)\n\n# Visualize raw data\neds.plot(raw, dur=10, n_chan=15)\n\n# Analyze power spectrum\neds.psdplt(raw, avg=True)\n\n# Create epochs\nev = \"/content/sample/events.tsv\"\neds.epochs(raw, events_tsv=ev, tmin=-0.5, tmax=1.5)\n\n# Run ICA\neds.ica(raw, n_components=20)\n\n# Plot frequency bands\neds.pltbands(raw)\n\n\n\n\nStart with small datasets: Begin with short recordings to understand the workflow before analyzing larger files.\nCheck your file paths: Ensure all file paths are correct and use forward slashes (/) or raw strings to avoid path errors.\nExperiment with parameters: Try different filter frequencies and epoch windows to see how they affect your analysis.\nUnderstand your data: Review the dataset documentation to know the sampling rate, channel layout, and event codes.\nVisualize first: Always plot your data before running complex analyses to spot obvious artifacts or issues.\n\n\n\n\n\nMNE-Python Documentation: https://mne.tools/\nGoogle Colab: https://colab.research.google.com/\nOpenNeuro Datasets: https://openneuro.org/\n\n\n\n\nIssue: Import error when loading eegducks - Solution: Ensure you’ve run the installation command and restarted your kernel if necessary\nIssue: File not found errors - Solution: Verify file paths are correct and files are uploaded to your workspace (especially in Google Colab)\nIssue: Plots not displaying - Solution: Set plot=True in function parameters or manually display using plt.show()\n\nEEGDUCKS is designed as a training tool to bridge the gap between theoretical knowledge and practical EEG analysis. As you become more comfortable, consider exploring the full capabilities of MNE-Python for advanced analyses."
+  },
+  {
+    "objectID": "gettingstarted.html#installation-quickstart",
+    "href": "gettingstarted.html#installation-quickstart",
+    "title": "Getting Started",
+    "section": "",
+    "text": "Here’s everything you need — from installation to band power — in one block of code:\n```python # ================================================ # EEGDUCKS — 5-Minute Quickstart # ================================================"
+  },
+  {
+    "objectID": "gettingstarted.html#overview",
+    "href": "gettingstarted.html#overview",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "EEGDUCKS is a beginner-friendly Python library designed to simplify EEG (electroencephalography) data analysis for psychology students. It serves as a wrapper around MNE-Python, making neuroimaging analysis accessible without extensive coding experience."
+  },
+  {
+    "objectID": "gettingstarted.html#installation",
+    "href": "gettingstarted.html#installation",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Before using eegducks, you need to install the library. In a Python environment or Jupyter notebook, run:\npip install eegducks\nNote: If using Google Colab, prefix the command with an exclamation mark:\n!pip install eegducks"
+  },
+  {
+    "objectID": "gettingstarted.html#step-1-import-the-library",
+    "href": "gettingstarted.html#step-1-import-the-library",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Once installed, import eegducks into your Python environment. It’s conventional to use an alias for convenience:\nimport eegducks as eds\nThis allows you to call eegducks functions using the shorter eds prefix throughout your code."
+  },
+  {
+    "objectID": "gettingstarted.html#step-2-load-eeg-data",
+    "href": "gettingstarted.html#step-2-load-eeg-data",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "EEG datasets typically consist of two components:\n\nEEG data file: Contains the actual brain signal recordings (formats: .fiff, .set, etc.)\nChannel location file: Specifies the positions of EEG electrodes (formats: .tsv, .locs)\n\n\n\n\nFirst, specify the path to your channel location file:\n# Define the channel location file path\nchan = \"/path/to/your/channel_locations.locs\"\nNext, load your EEG data using the load() function:\n# Load EEG data and store it in a variable called 'raw'\nraw = eds.load(\"/path/to/your/eeg_data.set\", locinf=chan)\n\n\n\nThe load() function accepts several optional parameters for preprocessing:\nload(filepath, l_freq=1, h_freq=30, preload=True, \n     ref=\"average\", plot=True, locinf=None)\n\nfilepath: Path to your EEG data file (required)\nl_freq: Low-pass filter frequency in Hz (default: 1)\nh_freq: High-pass filter frequency in Hz (default: 30)\npreload: Whether to load data into memory (default: True)\nref: Reference method for channels (default: “average”)\nplot: Whether to display plots automatically (default: True)\nlocinf: Path to channel location file (default: None)\n\nWhat happens during loading: The function imports your data, applies filtering to remove noise, sets up channel locations, and prepares the data for analysis."
+  },
+  {
+    "objectID": "gettingstarted.html#step-3-visualize-continuous-eeg-data",
+    "href": "gettingstarted.html#step-3-visualize-continuous-eeg-data",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "After loading your data, you can visualize the raw EEG signals over time:\n# Plot continuous EEG data\neds.plot(raw)\n\n\nCustomize your visualization with these parameters:\nplot(raw, dur=5, n_chan=20)\n\nraw: Your loaded EEG data object (required)\ndur: Duration of data to display in seconds (default: 5)\nn_chan: Number of channels to display (default: 20)\n\nThis generates a time-series plot showing voltage fluctuations across different electrode channels."
+  },
+  {
+    "objectID": "gettingstarted.html#step-4-analyze-the-power-spectrum",
+    "href": "gettingstarted.html#step-4-analyze-the-power-spectrum",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "The power spectrum reveals the frequency composition of your EEG signals, showing activity in different brain wave bands (delta, theta, alpha, beta, gamma).\n# Plot power spectrum for all channels\neds.psdplt(raw)\n\n# Plot average power spectrum across channels\neds.psdplt(raw, avg=True)\n\nThe power spectrum plot helps identify dominant frequencies in your data and can reveal artifacts or abnormal patterns."
+  },
+  {
+    "objectID": "gettingstarted.html#step-5-define-epochs-and-events",
+    "href": "gettingstarted.html#step-5-define-epochs-and-events",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Epochs are time-locked segments of EEG data aligned to specific events (e.g., stimulus presentation, button presses).\n\n\nIf your events are already embedded in the EEG file:\neds.epochs(raw)\n\n\n\n\n\nIf events are stored separately (common in structured datasets):\n# Specify the events file path\nev = \"/path/to/your/events.tsv\"\n\n# Create epochs using the events file\neds.epochs(raw, events_tsv=ev)\n\n\n\nFine-tune your epoch extraction:\nepochs(raw, event_id=2, tmin=-1, tmax=2, baseline=(-0.5, 0), \n       reject=None, plot=True, events_tsv=None)\n\nraw: Your loaded EEG data object (required)\nevent_id: Specific event type to extract (default: 2)\ntmin: Start time relative to event in seconds (default: -1)\ntmax: End time relative to event in seconds (default: 2)\nbaseline: Time window for baseline correction (default: -0.5 to 0 seconds)\nreject: Threshold for rejecting bad epochs (default: None)\nplot: Whether to generate epoch plots (default: True)\nevents_tsv: Path to external events file (default: None)\n\nThis function automatically generates visualizations showing averaged epochs and individual trials."
+  },
+  {
+    "objectID": "gettingstarted.html#step-6-run-independent-component-analysis-ica",
+    "href": "gettingstarted.html#step-6-run-independent-component-analysis-ica",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "ICA separates EEG signals into independent components, making it easier to identify and remove artifacts like eye blinks, muscle activity, or electrical noise.\n# Run ICA with default 15 components\neds.ica(raw)\n ### ICA Function Parameters\nAdjust the ICA parameters as needed:\nica(raw, n_components=15, montage=None)\n\nraw: Your loaded EEG data object (required)\nn_components: Number of independent components to compute (default: 15)\nmontage: Electrode montage specification (default: None)\n\nThe ICA function generates plots showing the spatial distribution and time course of each component, helping you identify which components represent artifacts versus neural activity."
+  },
+  {
+    "objectID": "gettingstarted.html#step-7-visualize-frequency-bands",
+    "href": "gettingstarted.html#step-7-visualize-frequency-bands",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Examine activity in specific frequency bands associated with different brain states:\n# Plot standard frequency bands (delta, theta, alpha, beta, gamma)\neds.pltbands(raw)\n\n# For epoched data, you can also specify custom bands\n# eds.pltbands(epochs, bands=None)\n\nStandard frequency bands: - Delta (1-4 Hz): Deep sleep - Theta (4-8 Hz): Drowsiness, meditation - Alpha (8-13 Hz): Relaxed wakefulness - Beta (13-30 Hz): Active thinking, focus - Gamma (30+ Hz): Higher cognitive processing"
+  },
+  {
+    "objectID": "gettingstarted.html#example-workflow",
+    "href": "gettingstarted.html#example-workflow",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Here’s a complete example combining all steps:\n# Import library\nimport eegducks as eds\n\n# Load data\nchan = \"/content/sample/eeglab_chan32.locs\"\nraw = eds.load(\"/content/sample/eeglab_data.set\", locinf=chan)\n\n# Visualize raw data\neds.plot(raw, dur=10, n_chan=15)\n\n# Analyze power spectrum\neds.psdplt(raw, avg=True)\n\n# Create epochs\nev = \"/content/sample/events.tsv\"\neds.epochs(raw, events_tsv=ev, tmin=-0.5, tmax=1.5)\n\n# Run ICA\neds.ica(raw, n_components=20)\n\n# Plot frequency bands\neds.pltbands(raw)"
+  },
+  {
+    "objectID": "gettingstarted.html#tips-for-beginners",
+    "href": "gettingstarted.html#tips-for-beginners",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Start with small datasets: Begin with short recordings to understand the workflow before analyzing larger files.\nCheck your file paths: Ensure all file paths are correct and use forward slashes (/) or raw strings to avoid path errors.\nExperiment with parameters: Try different filter frequencies and epoch windows to see how they affect your analysis.\nUnderstand your data: Review the dataset documentation to know the sampling rate, channel layout, and event codes.\nVisualize first: Always plot your data before running complex analyses to spot obvious artifacts or issues."
+  },
+  {
+    "objectID": "gettingstarted.html#resources",
+    "href": "gettingstarted.html#resources",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "MNE-Python Documentation: https://mne.tools/\nGoogle Colab: https://colab.research.google.com/\nOpenNeuro Datasets: https://openneuro.org/"
+  },
+  {
+    "objectID": "gettingstarted.html#troubleshooting",
+    "href": "gettingstarted.html#troubleshooting",
+    "title": "Using the EEGDUCKS Python Module",
+    "section": "",
+    "text": "Issue: Import error when loading eegducks - Solution: Ensure you’ve run the installation command and restarted your kernel if necessary\nIssue: File not found errors - Solution: Verify file paths are correct and files are uploaded to your workspace (especially in Google Colab)\nIssue: Plots not displaying - Solution: Set plot=True in function parameters or manually display using plt.show()\n\nEEGDUCKS is designed as a training tool to bridge the gap between theoretical knowledge and practical EEG analysis. As you become more comfortable, consider exploring the full capabilities of MNE-Python for advanced analyses."
+  }
+]
